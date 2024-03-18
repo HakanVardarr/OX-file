@@ -1,15 +1,127 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Homepage</title>
+    <title>OX-file</title>
+    <link rel="stylesheet" href="{% static 'homepage.css' %}">
   </head>
   <body>
-    <h1>Welcome to OX-file</h1>
-    <p>{{ email }}</p>
-    <button>
-        <a href="/auth/logout">Logout</a>
-    </button>
+    <div class="header">
+      <h1 class="logo">OX</h1>
+      <ul class="logout-items">
+        <li>
+          <button class="logout-button">
+            <a href="/auth/logout">Logout</a>
+          </button>
+        </li>
+        <li class="logout-profile">
+          {{ logo }}
+        </li>
+      </ul>
+    </div>
+    <div class="{% if not files %}content empty-content{% else %}content non-empty-content{% endif %}">
+      {% if not files %}
+        <div class="upload">
+          <h1>Start by uploading your first file</h1>
+          
+          <form method="post" enctype="multipart/form-data" class="file-form" action="/file/upload" id="file-form">
+            {% csrf_token %}
+              <label for="file" class="file">Upload</label>
+              <input type="file" name="file" id="file">
+          </form>
+        </div>
+      {% else %}
+        
+        <ul class="file-list">
+          <li class="file-list-element-upload">
+            <form method="post" enctype="multipart/form-data" class="file-form" action="/file/upload" id="file-form">
+              {% csrf_token %}
+                <label for="file" class="file">Upload</label>
+                <input type="file" name="file" id="file">
+            </form>
+          </li>
+
+          {% for file in files %}
+            <li class="file-list-element">
+              <div "file-part">
+                <p>{{ file.filename }}</p>
+                <p class="file-date">
+                  Uploaded at: {{file.uploaded_at}} UTC
+                </p>
+              </div>
+              <div class="buttons">
+                <button class="button download-button">
+                  Download
+                </button>
+                <button class="button delete-button">
+                  X
+                </button>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+    <script>
+      const fileInput = document.getElementById("file");
+      const downloadButtonList = document.querySelectorAll(".download-button")
+  
+
+
+      fileInput.addEventListener("change", function() {
+          const form = document.getElementById("file-form");
+        
+          form.submit();
+      });
+
+      for (var i = 0, length = downloadButtonList.length; i < length; i++) {
+        const button = downloadButtonList[i];
+
+        button.addEventListener("click", function() {
+          const file_name = button.parentNode.parentNode.children[0].children[0].innerHTML
+
+          fetch('file/download', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}' // Add CSRF token if not already included
+            },
+            body: JSON.stringify({ filename: file_name })
+          })
+          .then(response => {
+              if (response.ok) {
+
+                return response.blob()
+              } else {
+
+                  console.error('Failed to initiate file download');
+              }
+          })
+          .then(blob => {
+            const url = URL.createObjectURL(blob);
+
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = file_name; 
+            document.body.appendChild(link);
+            
+
+            link.click();
+            
+
+            URL.revokeObjectURL(url);
+            document.body.removeChild(link);
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+
+
+        })
+      }      
+  </script>
   </body>
 </html>

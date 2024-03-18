@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "authentication.apps.AuthenticationConfig",
+    "main.apps.MainConfig",
+    "file.apps.FileConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -70,6 +72,11 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "main", "static"),
+    os.path.join(BASE_DIR, "authentication", "static"),
 ]
 
 WSGI_APPLICATION = "oxfile.wsgi.application"
