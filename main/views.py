@@ -4,4 +4,8 @@ from django.shortcuts import render
 
 @login_required(login_url="/auth/login")
 def homepage(request):
-    return render(request, "homepage.html")
+    email = request.user.email
+
+    print(email)
+
+    return render(request, "homepage.html", {"email": email})
