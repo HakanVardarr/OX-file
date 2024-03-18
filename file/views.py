@@ -1,12 +1,11 @@
-import os
 from json import loads
 
-from django.conf import settings
-from django.http import FileResponse, Http404, HttpResponse, HttpResponseNotFound
+from django.http import FileResponse, HttpResponseNotFound
 from django.shortcuts import redirect
+from regex import P
+
 from file.forms import UploadFileForm
 from file.models import File
-from regex import P
 
 
 def upload(request):
