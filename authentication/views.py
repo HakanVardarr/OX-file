@@ -17,9 +17,10 @@ def register(request):
             password = form.cleaned_data.get("password1")
 
             User = get_user_model()
-            User.objects.create_user(email=email, password=password)
+            user = User.objects.create_user(email=email, password=password)
 
-            return redirect("login")
+            auth_login(request, user)
+            return redirect("/")
 
     return render(request, "register.html", {"form": form})
 
