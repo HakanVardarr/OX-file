@@ -1,8 +1,7 @@
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-
 from authentication.forms import UserChangeForm, UserCreationForm
 from authentication.models import User
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
 class UserAdmin(BaseUserAdmin):
@@ -11,11 +10,11 @@ class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     model = User
 
-    list_display = ("email", "is_staff")
-    list_filter = ("email", "is_staff")
+    list_display = ("username", "is_staff")
+    list_filter = ("username", "is_staff")
 
     fieldsets = (
-        (None, {"fields": ("email", "password")}),
+        (None, {"fields": ("username", "password")}),
         ("Permissions", {"fields": ("is_staff",)}),
     )
     add_fieldsets = (
@@ -23,12 +22,12 @@ class UserAdmin(BaseUserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("email", "password1", "password2", "is_staff"),
+                "fields": ("username", "password1", "password2", "is_staff"),
             },
         ),
     )
-    search_fields = ("email",)
-    ordering = ("email",)
+    search_fields = ("username",)
+    ordering = ("username",)
 
 
 admin.site.register(User, UserAdmin)

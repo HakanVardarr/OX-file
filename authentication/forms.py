@@ -1,23 +1,22 @@
+from authentication.models import User
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm as ChangeForm
 from django.contrib.auth.forms import UserCreationForm as CreationForm
 
-from authentication.models import User
-
 
 class UserRegistrationForm(forms.Form):
-    email = forms.CharField(label="Email")
+    username = forms.CharField(label="Username")
     password1 = forms.CharField(widget=forms.PasswordInput, label="Password")
     password2 = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
 
-    def clean_email(self):
+    def clean_username(self):
         User = get_user_model()
 
-        email = self.cleaned_data.get("email")
-        if User.objects.filter(email=email).exists():
-            raise forms.ValidationError("This email is already in use")
-        return email
+        username = self.cleaned_data.get("username")
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("This username is already in use")
+        return username
 
     def clean(self):
         cleaned_data = super().clean()
@@ -31,19 +30,17 @@ class UserRegistrationForm(forms.Form):
 
 
 class UserLoginForm(forms.Form):
-    email = forms.CharField(label="Email")
+    username = forms.CharField(label="Username")
     password = forms.CharField(widget=forms.PasswordInput, label="Password")
 
 
 class UserCreationForm(CreationForm):
-
     class Meta:
         model = User
-        fields = ("email",)
+        fields = ("username",)
 
 
 class UserChangeForm(ChangeForm):
-
     class Meta:
         model = User
-        fields = ("email",)
+        fields = ("username",)

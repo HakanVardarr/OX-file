@@ -1,10 +1,9 @@
+from authentication.forms import UserLoginForm, UserRegistrationForm
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-
-from authentication.forms import UserLoginForm, UserRegistrationForm
 
 
 def register(request):
@@ -13,11 +12,11 @@ def register(request):
         form = UserRegistrationForm(request.POST)
 
         if form.is_valid():
-            email = form.cleaned_data.get("email")
+            username = form.cleaned_data.get("username")
             password = form.cleaned_data.get("password1")
 
             User = get_user_model()
-            user = User.objects.create_user(email=email, password=password)
+            user = User.objects.create_user(username=username, password=password)
 
             auth_login(request, user)
             return redirect("/")
@@ -31,16 +30,16 @@ def login(request):
         form = UserLoginForm(request.POST)
 
         if form.is_valid():
-            email = form.cleaned_data.get("email")
+            username = form.cleaned_data.get("username")
             password = form.cleaned_data.get("password")
-            user = authenticate(request, email=email, password=password)
+            user = authenticate(request, username=username, password=password)
 
             if user is not None:
                 auth_login(request, user)
                 return redirect("/")
 
             else:
-                error_message = "Invalid email or password. Please try again."
+                error_message = "Invalid username or password. Please try again."
                 return render(
                     request,
                     "login.html",
