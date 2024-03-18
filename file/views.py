@@ -4,10 +4,9 @@ from json import loads
 from django.conf import settings
 from django.http import FileResponse, Http404, HttpResponse, HttpResponseNotFound
 from django.shortcuts import redirect
-from regex import P
-
 from file.forms import UploadFileForm
 from file.models import File
+from regex import P
 
 
 def upload(request):
@@ -26,7 +25,6 @@ def upload(request):
 def download(request):
     if request.method == "POST":
         filename = loads(request.body)["filename"]
-        print(filename)
         try:
             file_object = File.objects.get(user=request.user, filename=filename)
         except File.DoesNotExist:
@@ -34,7 +32,7 @@ def download(request):
 
         file_path = file_object.file.path
         try:
-            return FileResponse(open(file_path, "rb"), as_attachment=True)
+            return FileResponse(open(file_path, "rb"))
 
         except FileNotFoundError:
             return HttpResponseNotFound("<h1>File not found</h1>")

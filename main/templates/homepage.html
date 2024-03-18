@@ -33,7 +33,6 @@
           </form>
         </div>
       {% else %}
-        
         <ul class="file-list">
           <li class="file-list-element-upload">
             <form method="post" enctype="multipart/form-data" class="file-form" action="/file/upload" id="file-form">
@@ -42,7 +41,6 @@
                 <input type="file" name="file" id="file">
             </form>
           </li>
-
           {% for file in files %}
             <li class="file-list-element">
               <div "file-part">
@@ -86,40 +84,33 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}' // Add CSRF token if not already included
+                'X-CSRFToken': '{{ csrf_token }}' 
             },
             body: JSON.stringify({ filename: file_name })
           })
           .then(response => {
               if (response.ok) {
-
                 return response.blob()
               } else {
-
-                  console.error('Failed to initiate file download');
+                throw Error('Failed to initiate file download');
               }
           })
           .then(blob => {
             const url = URL.createObjectURL(blob);
-
 
             const link = document.createElement('a');
             link.href = url;
             link.download = file_name; 
             document.body.appendChild(link);
             
-
             link.click();
             
-
             URL.revokeObjectURL(url);
             document.body.removeChild(link);
           })
           .catch(error => {
               console.error('Error:', error);
           });
-
-
         })
       }      
   </script>
