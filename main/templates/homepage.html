@@ -5,114 +5,54 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OX-file</title>
-    <link rel="stylesheet" href="{% static 'homepage.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
   </head>
   <body>
-    <div class="header">
-      <h1 class="logo">OX</h1>
-      <ul class="logout-items">
+    <div class="flex align-center justify-between header">
+      <h1>OX</h1>
+      <ul class="flex align-center large list-style-none">
         <li>
-          <button class="logout-button">
+          <button class="medium button logout">
             <a href="/auth/logout">Logout</a>
           </button>
         </li>
-        <li class="logout-profile">
-          {{ logo }}
-        </li>
+        <li class="flex align-center justify-center large profile">{{ logo }}</li>
       </ul>
     </div>
-    <div class="{% if not files %}content empty-content{% else %}content non-empty-content{% endif %}">
+    <div class="{% if not files %}flex align-center justify-center content{% else %}content non-empty-content{% endif %}">
       {% if not files %}
         <div class="upload">
           <h1>Start by uploading your first file</h1>
-          
-          <form method="post" enctype="multipart/form-data" class="file-form" action="/file/upload" id="file-form">
+          <form method="post" enctype="multipart/form-data" class="flex justify-center file-form" action="/file/upload" id="file-form">
             {% csrf_token %}
-              <label for="file" class="file">Upload</label>
-              <input type="file" name="file" id="file">
+            <label for="file" class="flex align-center justify-center large button file">Upload</label>
+            <input type="file" name="file" id="file">
           </form>
         </div>
       {% else %}
         <ul class="file-list">
-          <li class="file-list-element-upload">
+          <li class="flex align-center justify-center file-list-element">
             <form method="post" enctype="multipart/form-data" class="file-form" action="/file/upload" id="file-form">
               {% csrf_token %}
-                <label for="file" class="file">Upload</label>
-                <input type="file" name="file" id="file">
+              <label for="file" class="flex align-center justify-center large button file">Upload</label>
+              <input type="file" name="file" id="file">
             </form>
           </li>
           {% for file in files %}
-            <li class="file-list-element">
+            <li class="flex align-center justify-between list-style-none file-list-element">
               <div "file-part">
                 <p>{{ file.filename }}</p>
-                <p class="file-date">
-                  Uploaded at: {{file.uploaded_at}} UTC
-                </p>
+                <p class="file-date">Uploaded at: {{file.uploaded_at}} UTC</p>
               </div>
-              <div class="buttons">
-                <button class="button download-button">
-                  Download
-                </button>
-                <button class="button delete-button">
-                  X
-                </button>
+              <div class="flex">
+                <button class="large button download">Download</button>
+                <button class="large button delete">X</button>
               </div>
             </li>
           {% endfor %}
         </ul>
       {% endif %}
     </div>
-    <script>
-      const fileInput = document.getElementById("file");
-      const downloadButtonList = document.querySelectorAll(".download-button")
-  
-
-
-      fileInput.addEventListener("change", function() {
-          const form = document.getElementById("file-form");
-        
-          form.submit();
-      });
-
-      for (var i = 0, length = downloadButtonList.length; i < length; i++) {
-        const button = downloadButtonList[i];
-
-        button.addEventListener("click", function() {
-          const file_name = button.parentNode.parentNode.children[0].children[0].innerHTML
-
-          fetch('file/download', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}' 
-            },
-            body: JSON.stringify({ filename: file_name })
-          })
-          .then(response => {
-              if (response.ok) {
-                return response.blob()
-              } else {
-                throw Error('Failed to initiate file download');
-              }
-          })
-          .then(blob => {
-            const url = URL.createObjectURL(blob);
-
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = file_name; 
-            document.body.appendChild(link);
-            
-            link.click();
-            
-            URL.revokeObjectURL(url);
-            document.body.removeChild(link);
-          })
-          .catch(error => {
-              console.error('Error:', error);
-          });
-        })
-      }      
-  </script>
+    <script src="{% static "app.js" %}"></script>
   </body>
 </html>

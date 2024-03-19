@@ -1,6 +1,7 @@
+import os
 from json import loads
 
-from django.http import FileResponse, HttpResponseNotFound
+from django.http import FileResponse, HttpResponse, HttpResponseNotFound
 from django.shortcuts import redirect
 from regex import P
 
@@ -27,13 +28,33 @@ def download(request):
         try:
             file_object = File.objects.get(user=request.user, filename=filename)
         except File.DoesNotExist:
-            return HttpResponseNotFound("<h1>File not found</h1>")
+            return HttpResponseNotFound()
 
         file_path = file_object.file.path
         try:
             return FileResponse(open(file_path, "rb"))
 
         except FileNotFoundError:
-            return HttpResponseNotFound("<h1>File not found</h1>")
+            return HttpResponseNotFound()
+
+    return HttpResponseNotFound()
+
+
+def delete(request):
+    if request.method == "POST":
+        filename = loads(request.body)["filename"]
+
+        try:
+            file_object = File.objects.get(user=request.user, filename=filename)
+        except File.DoesNotExist:
+            return HttpResponseNotFound()
+
+        file_path = file_object.file.path
+        print(file_path)
+
+        os.remove(file_path)
+        file_object.delete()
+
+        return HttpResponse()
 
     return HttpResponseNotFound()
