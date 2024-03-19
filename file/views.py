@@ -1,9 +1,7 @@
 import os
 from json import loads
 
-from django.http import FileResponse, HttpResponse, HttpResponseNotFound
-from django.shortcuts import redirect
-from regex import P
+from django.http import FileResponse, HttpResponse, HttpResponseNotFound, JsonResponse
 
 from file.forms import UploadFileForm
 from file.models import File
@@ -16,8 +14,12 @@ def upload(request):
         if form.is_valid():
             user = request.user
 
-            File.objects.create_file(user=user, uploaded_file=request.FILES["file"])
-            return redirect("/")
+            file = File.objects.create_file(
+                user=user, uploaded_file=request.FILES["file"]
+            )
+            return JsonResponse(
+                {"filename": file.filename, "uploaded_at": file.uploaded_at}
+            )
 
     return HttpResponseNotFound()
 

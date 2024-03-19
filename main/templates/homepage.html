@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,8 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OX-file</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
   </head>
   <body>
+    {% csrf_token %}
     <div class="flex align-center justify-between header">
       <h1>OX</h1>
       <ul class="flex align-center large list-style-none">
