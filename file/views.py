@@ -14,18 +14,12 @@ def upload(request):
         if form.is_valid():
             user = request.user
 
-<<<<<<< HEAD
-            File.objects.create_file(user=user, uploaded_file=request.FILES["file"])
-
-            return redirect("/")
-=======
             file = File.objects.create_file(
                 user=user, uploaded_file=request.FILES["file"]
             )
             return JsonResponse(
                 {"filename": file.filename, "uploaded_at": file.uploaded_at}
             )
->>>>>>> 880888d3331f30d885afc95399f4dfa7c7e23124
 
     return HttpResponseNotFound()
 
