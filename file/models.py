@@ -5,12 +5,12 @@ from authentication.models import User
 from file.managers import FileManager
 
 
-# Create your models here.
 class File(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     file = models.FileField(upload_to="uploads/")
     filename = models.CharField(max_length=256)
     uploaded_at = models.DateTimeField(default=timezone.now)
+    size = models.IntegerField()
 
     objects = FileManager()
 

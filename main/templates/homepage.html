@@ -3,9 +3,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OX-file</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OX-file provides secure file storage and easy accessibility. Discover why you should use OX-file, featuring a clean user interface, efficient file management, and strong privacy measures. Targeting users with insufficient storage, those needing files across multiple devices, and anyone requiring secure file storage and access. Explore our user-friendly interface with a search bar, shortcuts for file organization, and a customizable home screen.">
+    <meta name="keywords" content="OX-file, secure file storage, file access, easy accessibility, clean user interface, file management, privacy, user-oriented platform, insufficient storage, multiple devices, search bar, shortcuts, home screen">
+    <meta name="author" content="Oksobis Group">
+    <title>OX-file - Secure File Storage and Access</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
   </head>
@@ -19,13 +22,16 @@
             <a href="/auth/logout">Logout</a>
           </button>
         </li>
-        <li class="flex align-center justify-center large profile">{{ logo }}</li>
+        <li class="flex-column align-center justify-center">
+          <h1 class="flex align-center justify-center medium profile">{{logo}}</h1>
+          <h1 id="size"class="small size">{{size_left}}</h1>
+        </li>
       </ul>
     </div>
     <div class="{% if not files %}flex align-center justify-center content{% else %}content non-empty-content{% endif %}">
       {% if not files %}
-        <div class="upload">
-          <h1>Start by uploading your first file</h1>
+        <div class="flex-column align-center justfiy-center upload">
+          <h1>Upload your first file</h1>
           <form method="post" enctype="multipart/form-data" class="flex justify-center file-form" action="/file/upload" id="file-form">
             {% csrf_token %}
             <label for="file" class="flex align-center justify-center large button file">Upload</label>

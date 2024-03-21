@@ -18,6 +18,11 @@ body {
   display: flex;
 }
 
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
 .align-center {
   align-items: center;
 }
@@ -146,4 +151,9 @@ input[type="file"] {
 .delete {
   color: var(--primary-color);
   background-color: var(--secondary-color);
+}
+
+.size {
+  color: rgb(62, 62, 62);
+  margin-top: 0.3rem;
 }

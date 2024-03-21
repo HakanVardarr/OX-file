@@ -14,7 +14,7 @@ class FileManager(models.Manager):
         original_filename = uploaded_file.name
         unique_filename = self._change_file_name(original_filename, upload_dir)
 
-        file = self.model(user=user, filename=unique_filename)
+        file = self.model(user=user, filename=unique_filename, size=uploaded_file.size)
         file.file.save(unique_filename, uploaded_file)
         file.save()
         return file

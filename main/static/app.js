@@ -1,9 +1,22 @@
+function formatBytes(bytes, decimals = 2) {
+  if (!+bytes) return "0 Bytes";
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB"];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+}
+
 function registerEventHandlers() {
   const file_input = document.getElementById("file");
   const download_buttons = Array.from(
     document.getElementsByClassName("download")
   );
   const delete_buttons = Array.from(document.getElementsByClassName("delete"));
+  const size = document.getElementById("size");
 
   file_input.addEventListener("change", async () => {
     const form = document.getElementById("file-form");
@@ -78,6 +91,7 @@ function registerEventHandlers() {
         } else {
           file_list.innerHTML += file_inner_html;
         }
+        size.innerHTML = formatBytes(json.size_left);
 
         registerEventHandlers();
       })
@@ -137,13 +151,17 @@ function registerEventHandlers() {
         headers: headers,
         body: body,
       })
-        .then((response) => {
+        .then(async (response) => {
           if (!response.ok) {
             throw Error("Failed to delete the file.");
           }
-
+          return await response.json();
+        })
+        .then((json) => {
           const bigger_parent = parent.parentElement;
+
           bigger_parent.removeChild(parent);
+          size.innerHTML = `${formatBytes(json.size_left)}`;
 
           if (bigger_parent.childElementCount == 1) {
             const content = document.createElement("div");
@@ -153,8 +171,8 @@ function registerEventHandlers() {
               'input[name="csrfmiddlewaretoken"]'
             ).value;
             const form = `
-            <div class="upload">
-              <h1>Start by uploading your first file</h1>
+            <div class="flex-column align-center justfiy-center upload">
+              <h1>Upload your first file</h1>
               <form method="post" enctype="multipart/form-data" class="flex justify-center file-form" action="/file/upload" id="file-form">
                 <input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}">
                 <label for="file" class="flex align-center justify-center large button file">Upload</label>

@@ -53,7 +53,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "oxfile.urls"
+ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
     {
@@ -79,7 +79,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "authentication", "static"),
 ]
 
-WSGI_APPLICATION = "oxfile.wsgi.application"
+WSGI_APPLICATION = "core.wsgi.application"
 
 
 # Database
