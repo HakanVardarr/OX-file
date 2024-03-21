@@ -1,6 +1,7 @@
-from authentication.models import User
 from django.db import models
 from django.utils import timezone
+
+from authentication.models import User
 from file.managers import FileManager
 
 

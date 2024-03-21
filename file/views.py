@@ -17,6 +17,7 @@ def upload(request):
             user = request.user
 
             File.objects.create_file(user=user, uploaded_file=request.FILES["file"])
+
             return redirect("/")
 
     return HttpResponseNotFound()

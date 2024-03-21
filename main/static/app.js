@@ -43,8 +43,8 @@ download_buttons.forEach((button) => {
 
 delete_buttons.forEach((button) => {
   button.addEventListener("click", () => {
-    const file_name =
-      button.parentNode.parentNode.children[0].children[0].innerHTML;
+    const list_element = button.parentNode.parentNode;
+    const file_name = list_element.children[0].children[0].innerHTML;
     const csrf_token = get_csrf_token();
 
     if (csrf_token == null) {
@@ -66,7 +66,7 @@ delete_buttons.forEach((button) => {
         if (!response.ok) {
           throw Error("Failed to delete the file.");
         }
-        location.reload();
+        list_element.parentNode.removeChild(list_element);
       })
       .catch((error) => console.error("Error:", error));
   });
