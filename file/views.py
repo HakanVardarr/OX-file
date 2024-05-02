@@ -3,7 +3,6 @@ from json import loads
 
 from django.http import (
     FileResponse,
-    HttpResponse,
     HttpResponseNotAllowed,
     HttpResponseNotFound,
     JsonResponse,
@@ -25,9 +24,6 @@ def upload(request):
                 file = File.objects.create_file(
                     user=user, uploaded_file=request.FILES["file"]
                 )
-
-                print("User size:", user.size_left)
-                print("File size:", file_size)
 
                 user.size_left -= file_size
                 user.save()

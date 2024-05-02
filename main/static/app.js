@@ -65,13 +65,13 @@ function registerEventHandlers() {
             'input[name="csrfmiddlewaretoken"]'
           ).value;
           const form = `
-        <li class="flex align-center justify-center file-list-element">
-          <form method="post" enctype="multipart/form-data" class="file-form" action="/file/upload" id="file-form">
-            <input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}">
-            <label for="file" class="flex align-center justify-center large button file">Upload</label>
-            <input type="file" name="file" id="file">
-          </form>
-        </li>
+          <li class="flex align-center justify-center file-list-element">
+            <form method="post" enctype="multipart/form-data" class="file-form" action="/file/upload" id="file-form">
+              <input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}">
+              <label for="file" class="flex align-center justify-center large button file">Upload</label>
+              <input type="file" name="file" id="file">
+            </form>
+          </li>
         `;
           var content = document.getElementsByClassName("content")[0];
           document.body.removeChild(content);

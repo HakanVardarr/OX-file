@@ -1,9 +1,9 @@
-from authentication.forms import UserLoginForm, UserRegistrationForm
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
-from django.http import HttpResponse
 from django.shortcuts import redirect, render
+
+from authentication.forms import UserLoginForm, UserRegistrationForm
 
 
 def register(request):

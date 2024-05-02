@@ -1,11 +1,11 @@
-from authentication.forms import UserChangeForm, UserCreationForm
-from authentication.models import User
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
+from authentication.forms import UserChangeForm, UserCreationForm
+from authentication.models import User
+
 
 class UserAdmin(BaseUserAdmin):
-
     add_form = UserCreationForm
     form = UserChangeForm
     model = User
