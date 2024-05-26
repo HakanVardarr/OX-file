@@ -1,6 +1,6 @@
 :root {
-  --primary-color: black;
-  --secondary-color: #fff;
+  --primary-color: white;
+  --secondary-color: black;
 }
 
 * {
@@ -12,6 +12,8 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 35px;
+  background: var(--secondary-color);
+  color: var(--primary-color);
 }
 
 .flex {
@@ -53,15 +55,15 @@ body {
 
 .button {
   padding: 0.5em;
-  border-radius: 0.5em;
+  border-radius: 0.1em;
   outline: none;
   border: none;
   transition: all 300ms ease;
 }
 
 .button:hover {
-  transform: scale(1.2);
   cursor: pointer;
+  color: #e6c700;
 }
 
 .header {
@@ -78,25 +80,26 @@ body {
 }
 
 .logout > a {
-  margin-right: 1em;
+  display: flex;
   text-decoration: none;
   color: var(--primary-color);
   cursor: pointer;
+  transition: all 300ms ease;
 }
 
 .logout:hover > a {
   text-decoration: underline;
-  color: rgb(54, 54, 54);
 }
 
-.logout:hover {
-  transform: scale(1);
+.logout:hover > a {
+  color: #e6c700;
 }
 
 .profile {
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
+  background-color: black;
+  color: #e6c700;
   border-radius: 50%;
+  border: 2px solid #e6c700;
   width: 50px;
   height: 50px;
   padding: 0.8em;
@@ -124,9 +127,10 @@ input[type="file"] {
 }
 
 .file {
-  color: var(--secondary-color);
-  background-color: var(--primary-color);
-  border-radius: 0.4em;
+  color: var(--primary-color);
+  background-color: black;
+  border: 1px solid #e6c700;
+  border-radius: 1em;
   cursor: pointer;
 }
 
@@ -142,10 +146,20 @@ input[type="file"] {
 }
 
 .download {
-  color: var(--secondary-color);
-  background-color: var(--primary-color);
+  color: white;
+  background-color: black;
+  padding: 1rem;
+  background: black;
+  color: white;
+  border: 3px solid transparent;
+
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 500ms ease;
+  text-decoration: none;
   margin-right: 1em;
   margin-left: 2em;
+  border-radius: 5em;
 }
 
 .delete {
@@ -154,6 +168,5 @@ input[type="file"] {
 }
 
 .size {
-  color: rgb(62, 62, 62);
   margin-top: 0.3rem;
 }

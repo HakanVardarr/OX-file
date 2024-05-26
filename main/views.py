@@ -16,7 +16,7 @@ def convert_size(size_bytes):
     return "%s %s" % (s, size_name[i])
 
 
-@login_required(login_url="/auth/login")
+@login_required(login_url="/")
 def homepage(request):
     username = request.user.username
     files = File.objects.filter(user=request.user)
@@ -31,3 +31,7 @@ def homepage(request):
             "size_left": convert_size(size_left),
         },
     )
+
+
+def main(request):
+    return render(request, "main.html")

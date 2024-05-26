@@ -19,7 +19,7 @@ def register(request):
             user = User.objects.create_user(username=username, password=password)
 
             auth_login(request, user)
-            return redirect("/")
+            return redirect("/homepage")
 
     return render(request, "register.html", {"form": form})
 
@@ -36,7 +36,7 @@ def login(request):
 
             if user is not None:
                 auth_login(request, user)
-                return redirect("/")
+                return redirect("/homepage")
 
             else:
                 error_message = "Invalid username or password. Please try again."
@@ -52,4 +52,4 @@ def login(request):
 def logout(request):
     auth_logout(request)
 
-    return redirect("login")
+    return redirect("/")

@@ -9,7 +9,7 @@
     <meta name="keywords" content="OX-file, secure file storage, file access, easy accessibility, clean user interface, file management, privacy, user-oriented platform, insufficient storage, multiple devices, search bar, shortcuts, home screen">
     <meta name="author" content="Oksobis Group">
     <title>OX-file - Secure File Storage and Access</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'homepage.css' %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
   </head>
   <body>
@@ -34,7 +34,7 @@
           <h1>Upload your first file</h1>
           <form method="post" enctype="multipart/form-data" class="flex justify-center file-form" action="/file/upload" id="file-form">
             {% csrf_token %}
-            <label for="file" class="flex align-center justify-center large button file">Upload</label>
+            <label for="file" class="flex align-center justify-center large button file">+ New File</label>
             <input type="file" name="file" id="file">
           </form>
         </div>
@@ -43,7 +43,7 @@
           <li class="flex align-center justify-center file-list-element">
             <form method="post" enctype="multipart/form-data" class="file-form" action="/file/upload" id="file-form">
               {% csrf_token %}
-              <label for="file" class="flex align-center justify-center large button file">Upload</label>
+              <label for="file" class="flex align-center justify-center large button file">+ New File</label>
               <input type="file" name="file" id="file">
             </form>
           </li>
@@ -62,6 +62,6 @@
         </ul>
       {% endif %}
     </div>
-    <script src="{% static "app.js" %}"></script>
+    <script src="{% static "homepage.js" %}"></script>
   </body>
 </html>
