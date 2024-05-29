@@ -77,6 +77,7 @@ TEMPLATES = [
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "main", "static"),
     os.path.join(BASE_DIR, "authentication", "static"),
+    os.path.join(BASE_DIR, "file", "static"),
 ]
 
 WSGI_APPLICATION = "core.wsgi.application"

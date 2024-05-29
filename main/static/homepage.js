@@ -16,6 +16,7 @@ function registerEventHandlers() {
     document.getElementsByClassName("download")
   );
   const delete_buttons = Array.from(document.getElementsByClassName("delete"));
+  const share_buttons = Array.from(document.getElementsByClassName("share"));
   const size = document.getElementById("size");
 
   file_input.addEventListener("change", async () => {
@@ -52,6 +53,7 @@ function registerEventHandlers() {
             <p class="file-date">Uploaded at: ${formatted_date} UTC</p>
           </div>
           <div class="flex">
+          <button class="large button share">Share</button>
             <button class="large button download">Download</button>
             <button class="large button delete">X</button>
           </div>
@@ -190,6 +192,43 @@ function registerEventHandlers() {
           }
         })
         .catch((error) => console.error("Error:", error));
+    });
+  });
+
+  share_buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const parent = button.parentNode.parentNode;
+      const file_name = parent.children[0].children[0].innerHTML;
+      const csrf_token = get_csrf_token();
+
+      if (csrf_token == null) {
+        throw Error("CSRF token must be set.");
+      }
+
+      const headers = {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrf_token,
+      };
+      const body = JSON.stringify({ filename: file_name });
+      fetch("file/share", {
+        method: "POST",
+        headers: headers,
+        body: body,
+      })
+        .then(async (response) => {
+          if (!response.ok) {
+            throw Error("Failed to delete the file.");
+          }
+          return await response.json();
+        })
+        .then((json) => {
+          navigator.clipboard.writeText(
+            // THIS IS FOR TEST PURPOSE
+            "127.0.0.1:8000/file/" + json.file_name
+          );
+
+          alert("Copied the share link to the clipboard.");
+        });
     });
   });
 }

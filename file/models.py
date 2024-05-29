@@ -11,6 +11,7 @@ class File(models.Model):
     filename = models.CharField(max_length=256)
     uploaded_at = models.DateTimeField(default=timezone.now)
     size = models.IntegerField()
+    public = models.BooleanField(default=False)
 
     objects = FileManager()
 

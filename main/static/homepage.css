@@ -151,7 +151,6 @@ input[type="file"] {
   padding: 1rem;
   background: black;
   color: white;
-  border: 3px solid transparent;
 
   font-size: 20px;
   cursor: pointer;
@@ -159,7 +158,19 @@ input[type="file"] {
   text-decoration: none;
   margin-right: 1em;
   margin-left: 2em;
-  border-radius: 5em;
+}
+
+.share {
+  color: white;
+  background-color: black;
+  padding: 1rem;
+  background: black;
+  color: white;
+
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 500ms ease;
+  text-decoration: none;
 }
 
 .delete {

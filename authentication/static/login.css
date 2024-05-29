@@ -39,11 +39,6 @@ body {
   color: #fff;
 }
 
-.error-message {
-  color: red;
-  margin-bottom: 20px;
-}
-
 .input-group {
   margin-bottom: 20px;
   text-align: left;

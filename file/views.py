@@ -7,6 +7,7 @@ from django.http import (
     HttpResponseNotFound,
     JsonResponse,
 )
+from django.shortcuts import render
 
 from file.forms import UploadFileForm
 from file.models import File
@@ -47,7 +48,10 @@ def download(request):
         try:
             file_object = File.objects.get(user=request.user, filename=filename)
         except File.DoesNotExist:
-            return HttpResponseNotFound()
+            try:
+                file_object = File.objects.get(filename=filename, public=True)
+            except File.DoesNotExist:
+                return HttpResponseNotFound()
 
         file_path = file_object.file.path
         try:
@@ -79,3 +83,30 @@ def delete(request):
         return JsonResponse({"size_left": user.size_left})
 
     return HttpResponseNotFound()
+
+
+def share(request):
+    if request.method == "POST":
+        user = request.user
+        filename = loads(request.body)["filename"]
+
+        try:
+            file_object = File.objects.get(user=request.user, filename=filename)
+        except File.DoesNotExist:
+            return HttpResponseNotFound()
+
+        file_object.public = True
+        file_object.save()
+
+        return JsonResponse({"file_name": file_object.filename})
+
+    return HttpResponseNotFound()
+
+
+def shared_file(request, file_name):
+    try:
+        file_object = File.objects.get(filename=file_name, public=True)
+    except File.DoesNotExist:
+        return HttpResponseNotFound()
+
+    return render(request, "file.html", {"file_name": file_name})
