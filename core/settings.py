@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-jm&7z_c)+gc)3*qhw3p(*4_v8wij9ca3s%e@e4y6%iae$lhy7*
 DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
-
+CSRF_TRUSTED_ORIGINS = ["https://ox-file-production.up.railway.app"]
 
 # Application definition
 
