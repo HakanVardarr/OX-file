@@ -7,5 +7,6 @@ urlpatterns = [
     path("download", views.download, name="download"),
     path("delete", views.delete, name="delete"),
     path("share", views.share, name="share"),
+    path("hide", views.hide, name="hide"),
     path("<str:file_name>", views.shared_file, name="shared_file"),
 ]

@@ -49,9 +49,19 @@
           </li>
           {% for file in files %}
             <li class="flex align-center justify-between list-style-none file-list-element">
-              <div "file-part">
-                <p>{{ file.filename }}</p>
-                <p class="file-date">Uploaded at: {{file.uploaded_at}} UTC</p>
+              <div class="file-part">
+                {% if file in public_files %}
+                  <button class="large button eye white">
+                  </button>
+                  {% else %}
+                  <button class="large button eye">
+                  </button>
+                {% endif %}
+                </button>
+                <div>
+                  <p>{{ file.filename }}</p>
+                  <p class="file-date">Uploaded at: {{file.uploaded_at}} UTC</p>
+                </div>
               </div>
               <div class="flex">
                 <button class="large button share">Share</button>

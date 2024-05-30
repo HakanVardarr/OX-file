@@ -17,6 +17,7 @@ function registerEventHandlers() {
   );
   const delete_buttons = Array.from(document.getElementsByClassName("delete"));
   const share_buttons = Array.from(document.getElementsByClassName("share"));
+  const hide_buttons = Array.from(document.getElementsByClassName("eye"));
   const size = document.getElementById("size");
 
   file_input.addEventListener("change", async () => {
@@ -48,12 +49,16 @@ function registerEventHandlers() {
 
         const file_inner_html = `
         <li class="flex align-center justify-between list-style-none file-list-element">
-          <div "file-part">
-            <p>${json.filename}</p>
-            <p class="file-date">Uploaded at: ${formatted_date} UTC</p>
+          <div class="file-part">
+            <button class="large button eye">
+            </button>
+            <div>
+              <p>${json.filename}</p>
+              <p class="file-date">Uploaded at: ${formatted_date} UTC</p>
+            </div>
           </div>
           <div class="flex">
-          <button class="large button share">Share</button>
+            <button class="large button share">Share</button>
             <button class="large button download">Download</button>
             <button class="large button delete">X</button>
           </div>
@@ -70,7 +75,7 @@ function registerEventHandlers() {
           <li class="flex align-center justify-center file-list-element">
             <form method="post" enctype="multipart/form-data" class="file-form" action="/file/upload" id="file-form">
               <input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}">
-              <label for="file" class="flex align-center justify-center large button file">Upload</label>
+              <label for="file" class="flex align-center justify-center large button file">+ New File</label>
               <input type="file" name="file" id="file">
             </form>
           </li>
@@ -102,8 +107,8 @@ function registerEventHandlers() {
 
   download_buttons.forEach((button) => {
     button.addEventListener("click", async () => {
-      const file_name =
-        button.parentNode.parentNode.children[0].children[0].innerHTML;
+      const parent = button.parentNode.parentNode;
+      const file_name = parent.children[0].children[1].children[0].innerHTML;
       const csrf_token = get_csrf_token();
 
       if (csrf_token == null) {
@@ -135,7 +140,7 @@ function registerEventHandlers() {
   delete_buttons.forEach((button) => {
     button.addEventListener("click", () => {
       const parent = button.parentNode.parentNode;
-      const file_name = parent.children[0].children[0].innerHTML;
+      const file_name = parent.children[0].children[1].children[0].innerHTML;
       const csrf_token = get_csrf_token();
 
       if (csrf_token == null) {
@@ -177,7 +182,7 @@ function registerEventHandlers() {
               <h1>Upload your first file</h1>
               <form method="post" enctype="multipart/form-data" class="flex justify-center file-form" action="/file/upload" id="file-form">
                 <input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}">
-                <label for="file" class="flex align-center justify-center large button file">Upload</label>
+                <label for="file" class="flex align-center justify-center large button file">+ New File</label>
                 <input type="file" name="file" id="file">
               </form>
             </div>
@@ -198,37 +203,71 @@ function registerEventHandlers() {
   share_buttons.forEach((button) => {
     button.addEventListener("click", () => {
       const parent = button.parentNode.parentNode;
-      const file_name = parent.children[0].children[0].innerHTML;
-      const csrf_token = get_csrf_token();
+      const file_name = parent.children[0].children[1].children[0].innerHTML;
 
-      if (csrf_token == null) {
-        throw Error("CSRF token must be set.");
-      }
+      navigator.clipboard.writeText(
+        // THIS IS FOR TEST PURPOSE
+        "127.0.0.1:8000/file/" + file_name
+      );
 
-      const headers = {
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrf_token,
-      };
-      const body = JSON.stringify({ filename: file_name });
-      fetch("file/share", {
-        method: "POST",
-        headers: headers,
-        body: body,
-      })
-        .then(async (response) => {
+      alert("Copied the share link to the clipboard.");
+    });
+  });
+
+  hide_buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (button.classList.contains("white")) {
+        button.className = "large button eye";
+
+        const file_name = button.parentNode.children[1].children[0].innerHTML;
+        const csrf_token = get_csrf_token();
+        const hidden_image = document.getElementById("hidden-png");
+
+        if (csrf_token == null) {
+          throw Error("CSRF token must be set.");
+        }
+
+        const headers = {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrf_token,
+        };
+        const body = JSON.stringify({ filename: file_name });
+        fetch("file/hide", {
+          method: "POST",
+          headers: headers,
+          body: body,
+        }).then(async (response) => {
+          if (!response.ok) {
+            throw Error("Failed to delete the file.");
+          }
+        });
+      } else {
+        button.className = "large button eye white";
+
+        const parent = button.parentNode.parentNode;
+        const file_name = parent.children[0].children[1].children[0].innerHTML;
+        const csrf_token = get_csrf_token();
+
+        if (csrf_token == null) {
+          throw Error("CSRF token must be set.");
+        }
+
+        const headers = {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrf_token,
+        };
+        const body = JSON.stringify({ filename: file_name });
+        fetch("file/share", {
+          method: "POST",
+          headers: headers,
+          body: body,
+        }).then(async (response) => {
           if (!response.ok) {
             throw Error("Failed to delete the file.");
           }
           return await response.json();
-        })
-        .then((json) => {
-          navigator.clipboard.writeText(
-            // THIS IS FOR TEST PURPOSE
-            "127.0.0.1:8000/file/" + json.file_name
-          );
-
-          alert("Copied the share link to the clipboard.");
         });
+      }
     });
   });
 }

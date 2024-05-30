@@ -42,7 +42,7 @@ download_button.addEventListener("click", () => {
   })
     .then(async (response) => {
       if (!response.ok) {
-        throw Error("Failed to initiate file download.");
+        throw Error(response.statusText);
       }
       return await response.blob();
     })

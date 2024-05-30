@@ -1,14 +1,17 @@
 import os
 from json import loads
 
+from django.contrib.auth.decorators import login_required
 from django.http import (
     FileResponse,
+    HttpResponse,
     HttpResponseNotAllowed,
     HttpResponseNotFound,
     JsonResponse,
 )
 from django.shortcuts import render
 
+import file
 from file.forms import UploadFileForm
 from file.models import File
 
@@ -42,6 +45,7 @@ def upload(request):
     return HttpResponseNotFound()
 
 
+@login_required
 def download(request):
     if request.method == "POST":
         filename = loads(request.body)["filename"]
@@ -49,7 +53,7 @@ def download(request):
             file_object = File.objects.get(user=request.user, filename=filename)
         except File.DoesNotExist:
             try:
-                file_object = File.objects.get(filename=filename, public=True)
+                file_object = File.objects.filter(filename=filename, public=True)
             except File.DoesNotExist:
                 return HttpResponseNotFound()
 
@@ -103,10 +107,35 @@ def share(request):
     return HttpResponseNotFound()
 
 
+@login_required(login_url="/")
 def shared_file(request, file_name):
     try:
         file_object = File.objects.get(filename=file_name, public=True)
     except File.DoesNotExist:
-        return HttpResponseNotFound()
+        try:
+            file_object = File.objects.get(filename=file_name)
+        except:
+            return render(request, "file_not_found.html", {"msg": "File not found."})
+
+        return render(
+            request, "file_not_found.html", {"msg": "You cannot access this file."}
+        )
 
     return render(request, "file.html", {"file_name": file_name})
+
+
+def hide(request):
+    if request.method == "POST":
+        filename = loads(request.body)["filename"]
+
+        try:
+            file_object = File.objects.get(user=request.user, filename=filename)
+        except File.DoesNotExist:
+            return HttpResponseNotFound()
+
+        file_object.public = False
+        file_object.save()
+
+        return HttpResponse()
+
+    return HttpResponseNotFound()

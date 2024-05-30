@@ -1,0 +1,31 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="OX-file provides secure file storage and easy accessibility. Discover why you should use OX-file, featuring a clean user interface, efficient file management, and strong privacy measures. Targeting users with insufficient storage, those needing files across multiple devices, and anyone requiring secure file storage and access. Explore our user-friendly interface with a search bar, shortcuts for file organization, and a customizable home screen."
+    />
+    <meta
+      name="keywords"
+      content="OX-file, secure file storage, file access, easy accessibility, clean user interface, file management, privacy, user-oriented platform, insufficient storage, multiple devices, search bar, shortcuts, home screen"
+    />
+    <meta name="author" content="Oksobis Group" />
+    <title>OX-file - Secure File Storage and Access</title>
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="{% static 'favicon.ico' %}"
+    />
+    <link rel="stylesheet" href="{% static 'file.css' %}" />
+  </head>
+  <body>
+    {% csrf_token %}
+    <div class="container">
+      <p>{{ msg }}</p>
+    </div>
+  </body>
+</html>

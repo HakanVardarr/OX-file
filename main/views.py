@@ -20,6 +20,8 @@ def convert_size(size_bytes):
 def homepage(request):
     username = request.user.username
     files = File.objects.filter(user=request.user)
+    public_files = File.objects.filter(user=request.user, public=True)
+
     size_left = request.user.size_left
 
     return render(
@@ -29,6 +31,7 @@ def homepage(request):
             "logo": username[0].upper(),
             "files": files,
             "size_left": convert_size(size_left),
+            "public_files": public_files,
         },
     )
 

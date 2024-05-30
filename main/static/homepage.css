@@ -20,6 +20,23 @@ body {
   display: flex;
 }
 
+.file-part {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.eye {
+  margin-right: 1rem;
+  background-color: #e6c700;
+  width: 15px;
+  height: 15px;
+}
+
+.white {
+  background-color: white;
+}
+
 .flex-column {
   display: flex;
   flex-direction: column;
